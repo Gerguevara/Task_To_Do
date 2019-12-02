@@ -55,8 +55,67 @@ const loadDB = () => {
   }
 }
 
+//this funtion is used to update the task state
+//funtion FindIndex recives a callback and
+//  return the index that meets the condition if there no index return -1
+const update = (description, completed = true) => {
+  loadDB();
+  let index = listToDo.findIndex(task => {
+    return task.description === description
+  });
+  if (index >= 0) {
+    listToDo[index].completed = completed;
+    saveOnDB();
+    return 'task was updated!!'
+  } else {
+    return 'Sorry it could not found that Task'
+  }
+}
 
+// this funtion delete a task
+// funtion filter brings us an array that meets one condition, in this case
+// it is excluding a task that match with description and then te original
+// array is overwritten
+
+const deletet = (description) => {
+  loadDB();
+
+  let newlist = listToDo.filter(task => {
+    return task.description != description
+  })
+  if (newlist.length == listToDo.length) {
+    return 'Sorry there is not such task'
+  } else {
+    listToDo = newlist;
+    saveOnDB();
+    return "Task was deleted"
+  }
+}
+
+// thisi funtion edits a saved newDescription by findIndex funtion
+const edit = (description, new_Description) => {
+  loadDB()
+
+  let index = listToDo.findIndex(task => {
+    return task.description == description
+  });
+  if (index >= 0) {
+    listToDo[index].description = new_Description;
+    saveOnDB();
+    return 'task description was updated!!'
+  } else {
+    return 'Sorry it could not found that Task description'
+  }
+
+
+
+}
+
+// exporting modules
 module.exports = {
   create,
-  getList
+  getList,
+  update,
+  deletet,
+  edit
 }
